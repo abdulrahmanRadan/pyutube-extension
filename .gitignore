@@ -1,0 +1,22 @@
+# Ignore node_modules folder
+/pyutube-server/node_modules
+/pyutube-server/video
+
+/node_modules
+/video
+# Ignore logs
+*.log
+
+# Ignore .DS_Store file (macOS)
+.DS_Store
+
+# Ignore environment files
+.env
+
+# Ignore build files
+/dist
+/build
+
+# Ignore other temporary files
+*.tmp
+*.bak
