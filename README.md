@@ -18,30 +18,34 @@ This is a Chrome extension that allows users to easily download YouTube videos b
    ```bash
    git clone https://github.com/abdulrahmanRadan/pyutube-extension.git
    ```
-2. Open Chrome and go to `chrome://extensions/`.
-3. Enable "Developer mode" at the top right.
-4. Click on "Load unpacked" and select the folder containing the extension files (`pyutube-extension/pyutube`).
+   ## Running the Server   
+   1. Navigate to the `pyutube-server` directory.
+      ```bash
+      cd pyutube-extension/pyutube-server
+      ```
+   2. Install the dependencies:
+      ```bash
+      npm install
+      ```
+   3. Start the server:
+      ```bash
+      node server.js
+      ```
+   ## Usage
 
-## Usage
+2. Open Chrome and go to `chrome://extensions/`.
+3. Enable "Developer mode" at the top right. 
+4. Click on "Load unpacked" and select the folder containing the extension files (`pyutube-extension/pyutube`). 
+![image](./images/image1.jpg)
+
+
+
 
 1. Copy the URL of the YouTube video you want to download.
 2. A download button will appear on the screen.
 3. Click the download button to start downloading the video.
 
-## Running the Server
 
-1. Navigate to the `pyutube-server` directory.
-   ```bash
-   cd pyutube-extension/pyutube-server
-   ```
-2. Install the dependencies:
-   ```bash
-   npm install
-   ```
-3. Start the server:
-   ```bash
-   node server.js
-   ```
 
 ## Requirements
 
