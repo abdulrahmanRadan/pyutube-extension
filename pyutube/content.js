@@ -42,8 +42,8 @@ function showDownloadButton(videoUrl) {
   button.onclick = function () {
     console.log("Button clicked, sending request to server...");
     const userDefinedPath = prompt(
-      "Enter the path to save the video (leave empty for default):",
-      "./video/"
+      "Enter the path to save the video in C drive (leave empty for default path C:/video ):",
+      "/video/"
     );
     fetch("http://localhost:3000/download", {
       method: "POST",

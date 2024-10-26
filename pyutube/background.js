@@ -1,14 +1,17 @@
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === "download") {
     const videoUrl = message.url;
-    const command = `pyutube "${videoUrl}" "C:\\pyutube"`; // استبدال [PATH] بمسار حقيقي
+    const userDefinedPath = message.path || "/video/"; // مسار الفيديو الذي حدده المستخدم
 
-    if (navigator.userAgent.indexOf("Windows") !== -1) {
-      // للأمر في ويندوز
-      require("child_process").exec(`start cmd /k ${command}`);
-    } else {
-      // للأمر في لينكس/ماك
-      require("child_process").exec(`gnome-terminal -- ${command}`);
-    }
+    fetch("http://localhost:3000/download", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ url: videoUrl, path: userDefinedPath }),
+    })
+      .then((response) => response.text())
+      .then((data) => console.log(data))
+      .catch((error) => console.error("Error:", error));
   }
 });

@@ -2,36 +2,48 @@ const express = require("express");
 const cors = require("cors");
 const { exec } = require("child_process");
 const fs = require("fs");
-const path = require("path"); // استيراد حزمة path
-
+const path = require("path");
+const os = require("os");
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
-const defaultPath = path.join("./", "video"); // مسار افتراضي
-
-// تأكد من أن المجلد موجود، وإذا لم يكن موجودًا، قم بإنشائه
-if (!fs.existsSync(defaultPath)) {
-  fs.mkdirSync(defaultPath, { recursive: true });
-  console.log(`Created directory at ${defaultPath}`);
-}
+const terminalPath = path.join(os.homedir(), "Documents");
 
 app.post("/download", (req, res) => {
   const videoUrl = req.body.url;
-  const userPath = req.body.path || defaultPath; // الحصول على المسار المدخل أو استخدام المسار الافتراضي
+  const userProvidedPath = req.body.path;
 
-  console.log(`Received video URL: ${videoUrl}`); // إضافة تسجيل الرابط المستلم
-  console.log(`Using path: ${userPath}`); // طباعة المسار المستخدم
+  // طباعة المسار الذي يأتي من background.js
+  console.log(`Received path from background: ${userProvidedPath}`);
+  console.log(`Using terminal path: ${terminalPath}`);
 
-  const command = `pyutube "${videoUrl}" "${userPath}"`;
-  const cmdCommand = `start cmd /k "${command}"`;
+  const finalPath = userProvidedPath; // استخدام المسار المستلم من background.js كما هو
+  console.log(`Final path for video: ${finalPath}`);
+  console.log(`Video URL: ${videoUrl}`);
+
+  if (!fs.existsSync(finalPath)) {
+    fs.mkdirSync(finalPath, { recursive: true });
+    console.log(`Created directory at ${finalPath}`);
+  }
+
+  const command = `pyutube "${videoUrl}" "${finalPath}"`;
+  let cmdCommand;
+
+  if (process.platform === "win32") {
+    cmdCommand = `start cmd.exe /K "cd /d ${terminalPath} && ${command}"`;
+  } else {
+    cmdCommand = `gnome-terminal -- bash -c "cd ${terminalPath} && ${command}"`;
+  }
 
   exec(cmdCommand, (error, stdout, stderr) => {
     if (error) {
       console.error(`Error: ${error.message}`);
       return res.status(500).send("Failed to execute command");
     }
-    res.send("Command opened in CMD");
+    console.log(stdout);
+    res.send("Command executed successfully");
   });
 });
 
