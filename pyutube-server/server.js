@@ -9,7 +9,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const terminalPath = path.join(os.homedir(), "Downloads");
+const terminalPath = path.join(os.homedir(), "Downloads/", "video");
 
 app.post("/download", (req, res) => {
   const videoUrl = req.body.url;
@@ -18,8 +18,11 @@ app.post("/download", (req, res) => {
 
   const command = `pyutube "${videoUrl}" "${terminalPath}"`;
   let cmdCommand;
+
   if (process.platform === "win32") {
     cmdCommand = `start cmd.exe /K "cd /d ${terminalPath} && ${command}"`;
+  } else if (process.platform === "darwin") {
+    cmdCommand = `osascript -e 'tell application "Terminal" to do script "cd ${terminalPath} && ${command}"'`;
   } else {
     cmdCommand = `gnome-terminal -- bash -c "cd ${terminalPath} && ${command}"`;
   }
