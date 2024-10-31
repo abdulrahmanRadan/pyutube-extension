@@ -22,9 +22,13 @@ app.post("/download", (req, res) => {
   if (process.platform === "win32") {
     cmdCommand = `start cmd.exe /K "cd /d ${terminalPath} && ${command}"`;
   } else if (process.platform === "darwin") {
-    cmdCommand = `osascript -e 'tell application "Terminal" to do script "cd ${terminalPath} && ${command}"'`;
+    cmdCommand = `open -a Terminal "${terminalPath}" && osascript -e 'tell application "Terminal" to do script "cd ${terminalPath} && ${command}"'`;
   } else {
-    cmdCommand = `gnome-terminal -- bash -c "cd ${terminalPath} && ${command}"`;
+    // محاولة استخدام عدة تيرمينالات في لينكس
+    cmdCommand = `gnome-terminal --working-directory=${terminalPath} -e "bash -c '${command}; exec bash'" || \
+                  xfce4-terminal --working-directory=${terminalPath} -e "bash -c '${command}; exec bash'" || \
+                  konsole --workdir ${terminalPath} -e "bash -c '${command}; exec bash'" || \
+                  xterm -e "cd ${terminalPath} && ${command}"`;
   }
 
   exec(cmdCommand, (error, stdout, stderr) => {
