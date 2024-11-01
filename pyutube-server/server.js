@@ -16,7 +16,7 @@ app.post("/download", (req, res) => {
   console.log(`Using terminal path: ${terminalPath}`);
   console.log(`Video URL: ${videoUrl}`);
 
-  const command = `pyutube "${videoUrl}" "${terminalPath}"`;
+  const command = `pyutube ${videoUrl} ${terminalPath}`;
   let cmdCommand;
 
   if (process.platform === "win32") {
