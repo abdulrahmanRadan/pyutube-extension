@@ -22,7 +22,7 @@ app.post("/download", (req, res) => {
   if (process.platform === "win32") {
     cmdCommand = `start cmd.exe /K "cd /d ${terminalPath} && ${command}"`;
   } else if (process.platform === "darwin") {
-    cmdCommand = `open -a Terminal "${terminalPath}" && osascript -e 'tell application "Terminal" to do script "cd ${terminalPath} && ${command}"'`;
+    cmdCommand = `osascript -e 'tell application "Terminal" to do script "cd ${terminalPath} && ${command}"'`;
   } else {
     // محاولة استخدام عدة تيرمينالات في لينكس
     cmdCommand = `gnome-terminal --working-directory=${terminalPath} -e "bash -c '${command}; exec bash'" || \
