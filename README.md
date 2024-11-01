@@ -1,4 +1,3 @@
-
 # YouTube Video Downloader Extension
 
 ![Icon](./pyutube/images/icon128.png)
@@ -15,10 +14,13 @@ This is a Chrome extension that allows users to easily download YouTube videos b
 ## Installation
 
 1. Download or clone this repository.
+
    ```bash
    git clone https://github.com/abdulrahmanRadan/pyutube-extension.git
    ```
-   ## Running the Server   
+
+   ## Running the Server
+
    1. Navigate to the `pyutube-server` directory.
       ```bash
       cd pyutube-extension/pyutube-server
@@ -29,23 +31,19 @@ This is a Chrome extension that allows users to easily download YouTube videos b
       ```
    3. Start the server:
       ```bash
-       npm start
+      npm start
       ```
+
    ## Usage
 
 2. Open Chrome and go to `chrome://extensions/`.
-3. Enable "Developer mode" at the top right. 
-4. Click on "Load unpacked" and select the folder containing the extension files (`pyutube-extension/pyutube`). 
-![image](./images/image1.jpg)
+3. Enable "Developer mode" at the top right.
+4. Click on "Load unpacked" and select the folder containing the extension files (`pyutube-extension/pyutube`).
+   ![image](./images/image1.jpg)
 
-
-
-
-1. Copy the URL of the YouTube video you want to download.
-2. A download button will appear on the screen.
-3. Click the download button to start downloading the video.
-
-
+5. Copy the URL of the YouTube video you want to download.
+6. A download button will appear on the screen.
+7. Click the download button to start downloading the video.
 
 ## Requirements
 
@@ -55,6 +53,7 @@ This is a Chrome extension that allows users to easily download YouTube videos b
 ## Dependencies
 
 This extension uses the following tool for downloading videos:
+
 - [pyutube](https://pypi.org/project/pyutube/)
 
 ## License
@@ -68,4 +67,3 @@ If you want to contribute to this project, feel free to submit a pull request or
 ## Acknowledgements
 
 - Thanks to the contributors of the [pyutube](https://pypi.org/project/pyutube/) project for their work on the video downloading functionality.
-
