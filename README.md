@@ -29,7 +29,7 @@ This is a Chrome extension that allows users to easily download YouTube videos b
       ```
    3. Start the server:
       ```bash
-      node server.js
+       npm start
       ```
    ## Usage
 
