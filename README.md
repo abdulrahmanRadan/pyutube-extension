@@ -1,7 +1,7 @@
 
 # YouTube Video Downloader Extension
 
-![Icon](./pyutube/icon.png)
+![Icon](./pyutube/images/icon128.png)
 
 This is a Chrome extension that allows users to easily download YouTube videos by copying the video URL. Once the URL is copied, a download button will appear on the screen, allowing users to initiate the download process.
 
