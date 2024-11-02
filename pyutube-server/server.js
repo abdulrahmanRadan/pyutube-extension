@@ -11,12 +11,18 @@ app.use(express.json());
 
 const terminalPath = path.join(os.homedir(), "Downloads/", "video");
 
+// تحقق من وجود المجلد، وإن لم يكن موجودًا فقم بإنشائه
+if (!fs.existsSync(terminalPath)) {
+  fs.mkdirSync(terminalPath, { recursive: true });
+  console.log(`Directory created at: ${terminalPath}`);
+}
+
 app.post("/download", (req, res) => {
   const videoUrl = req.body.url;
   console.log(`Using terminal path: ${terminalPath}`);
   console.log(`Video URL: ${videoUrl}`);
 
-  const command = `pyutube ${videoUrl} ${terminalPath}`;
+  const command = `pyutube "${videoUrl}" "${terminalPath}"`;
   let cmdCommand;
 
   if (process.platform === "win32") {
