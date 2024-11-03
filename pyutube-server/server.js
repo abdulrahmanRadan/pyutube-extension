@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const { exec, spawn } = require("child_process");
+const { exec } = require("child_process");
 const fs = require("fs");
 const path = require("path");
 const os = require("os");
@@ -16,7 +16,6 @@ if (!fs.existsSync(terminalPath)) {
   fs.mkdirSync(terminalPath, { recursive: true });
   console.log(`Directory created at: ${terminalPath}`);
 }
-
 app.post("/download", (req, res) => {
   const videoUrl = req.body.url;
   console.log(`Using terminal path: ${terminalPath}`);
@@ -26,18 +25,14 @@ app.post("/download", (req, res) => {
   let cmdCommand;
 
   if (process.platform === "win32") {
-    // أمر لنظام Windows
     cmdCommand = `start cmd.exe /K "cd /d ${terminalPath} && ${command}"`;
   } else if (process.platform === "darwin") {
-    // الاحتمال الأول: استخدام osascript لفتح Terminal
     cmdCommand = `osascript -e 'tell application "Terminal" to do script "cd ${terminalPath} && ${command}"'`;
-
     exec(cmdCommand, (error, stdout, stderr) => {
       if (error) {
         console.warn(`osascript failed: ${error.message}`);
         // الاحتمال الثاني: استخدام iTerm إذا فشل Terminal
         const itermCommand = `open -a iTerm.app "${terminalPath}" && osascript -e 'tell application "iTerm" to do script "cd ${terminalPath} && ${command}"'`;
-
         exec(itermCommand, (itermError, itermStdout, itermStderr) => {
           if (itermError) {
             console.warn(`iTerm failed: ${itermError.message}`);
@@ -46,12 +41,10 @@ app.post("/download", (req, res) => {
               "-e",
               `tell application "Terminal" to do script "cd ${terminalPath} && ${command}"`,
             ]);
-
             term.on("error", (spawnError) => {
               console.error(`Spawn error: ${spawnError.message}`);
               return res.status(500).send("All command attempts failed");
             });
-
             term.on("exit", (code) => {
               if (code === 0) {
                 res.send("Command executed successfully via spawn");
@@ -70,21 +63,21 @@ app.post("/download", (req, res) => {
       }
     });
   } else {
-    // محاولات لأنظمة لينكس المختلفة
+    // محاولة استخدام عدة تيرمينالات في لينكس
     cmdCommand = `gnome-terminal --working-directory=${terminalPath} -e "bash -c '${command}; exec bash'" || \
                   xfce4-terminal --working-directory=${terminalPath} -e "bash -c '${command}; exec bash'" || \
                   konsole --workdir ${terminalPath} -e "bash -c '${command}; exec bash'" || \
                   xterm -e "cd ${terminalPath} && ${command}"`;
-
-    exec(cmdCommand, (error, stdout, stderr) => {
-      if (error) {
-        console.error(`Linux terminal error: ${error.message}`);
-        return res.status(500).send("Failed to execute command on Linux");
-      }
-      console.log(stdout);
-      res.send("Command executed successfully on Linux");
-    });
   }
+
+  exec(cmdCommand, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error: ${error.message}`);
+      return res.status(500).send("Failed to execute command");
+    }
+    console.log(stdout);
+    res.send("Command executed successfully");
+  });
 });
 
 app.listen(3000, () => {
